@@ -1,0 +1,12 @@
+# https://codewithhugo.com/docker-compose-local-https/
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: ../
+      dockerfile: docker/app/Dockerfile
+    volumes:
+      - ..:/app:cached
+      - ~/.ssh:/root/.ssh:ro
+    command: /bin/sh -c "while sleep 1000; do :; done"
