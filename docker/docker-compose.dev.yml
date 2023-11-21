@@ -1,12 +1,74 @@
 # https://codewithhugo.com/docker-compose-local-https/
 version: '3.9'
 
+volumes:
+  postgres_data:
+  bundle:
+  node_modules:
+  rails_cache:
+  public:
+
+networks:
+  ai-rails-net:
+    name: ai_rails_network
+
 services:
-  app:
+  ai_rails_app:
+    container_name: ai_rails_app
     build:
       context: ../
       dockerfile: docker/app/Dockerfile
+    image: ai_rails:dev
+    environment:
+      VITE_RUBY_HOST: ai_rails_vite
+    working_dir: /app
+    depends_on:
+      - ai_rails_db
+      - ai_rails_vite
+    links:
+      - ai_rails_db
+    ports:
+      - 3000:3000
+      - 1234:1234
+      - 26162:26162
+    stdin_open: true
+    tty: true
     volumes:
       - ..:/app:cached
+      - rails_cache:/app/tmp/cache
+      - bundle:/usr/local/bundle
+      - node_modules:/app/node_modules
+      - public:/app/public/vite
       - ~/.ssh:/root/.ssh:ro
-    command: /bin/sh -c "while sleep 1000; do :; done"
+    tmpfs:
+      - /tmp
+    networks:
+      - ai-rails-net
+  ai_rails_db:
+    image: postgres:11.6-alpine
+    container_name: ai_rails_db
+    volumes:
+      - ../docker/db/certs/server.crt:/var/lib/postgresql/server.crt
+      - ../docker/db/certs/server.key:/var/lib/postgresql/server.key
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ai-rails-net
+  ai_rails_vite:
+    build:
+      context: ../
+      dockerfile: docker/app/Dockerfile
+    container_name: ai_rails_vite
+    image: ai_rails:dev
+    command: sh /app/boot-vite.sh
+    volumes:
+      - ..:/app:cached
+      - bundle:/usr/local/bundle
+      - node_modules:/app/node_modules
+      - public:/app/public
+    environment:
+      DEBUG: '*vite*'
+      VITE_RUBY_HOST: 0.0.0.0
+    ports:
+      - "3036:3036"
+    networks:
+      - ai-rails-net

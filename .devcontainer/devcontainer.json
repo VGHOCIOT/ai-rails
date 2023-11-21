@@ -4,8 +4,9 @@
 	"name": "AI Rails",
 	"dockerComposeFile": [
     "../docker/docker-compose.dev.yml",
+    "docker-compose.yml"
   ],
-  "service": "app",
+  "service": "ai_rails_app",
 	"workspaceFolder": "/app",
 
 	// Set *default* container specific settings.json values on container create.

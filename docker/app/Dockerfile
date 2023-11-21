@@ -16,6 +16,8 @@ WORKDIR /app
 
 # Expose Puma port
 EXPOSE 3000
+EXPOSE 1234
+EXPOSE 26162
 
 # Save timestamp of image building
 RUN date -u > BUILD_TIME
