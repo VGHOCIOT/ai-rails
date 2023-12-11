@@ -1,10 +1,7 @@
-<h1>Editing user</h1>
+<div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
 
+<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Editing user</h5>
 <%= render "form", user: @user %>
-
-<br>
-
-<div>
-  <%= link_to "Show this user", @user %> |
-  <%= link_to "Back to users", users_path %>
+<p class="font-normal text-gray-700 dark:text-gray-400"><%= link_to "Show this user", @user %> | <%= link_to "Back to users", users_path %></p>
 </div>
+

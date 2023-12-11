@@ -1,32 +1,35 @@
 <%= form_with(model: user) do |form| %>
   <% if user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
-      <ul>
-        <% user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+    <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+      <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+      </svg>
+      <span class="sr-only">Info</span>
+      <div>
+        <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+        <ul class="max-w-md space-y-1 text-red list-disc list-inside">
+          <% user.errors.each do |error| %>
+            <li><%= error.full_message%></li>
+          <% end %>
+        </ul>
+        </div>
     </div>
   <% end %>
 
-  <div>
+  <div class="font-normal text-gray-700 dark:text-gray-400">
     <%= form.label :first_name, style: "display: block" %>
     <%= form.text_field :first_name %>
   </div>
 
-  <div>
+  <div class="font-normal text-gray-700 dark:text-gray-400">
     <%= form.label :last_name, style: "display: block" %>
     <%= form.text_field :last_name %>
   </div>
 
-  <div>
+  <div class="font-normal text-gray-700 dark:text-gray-400">
     <%= form.label :email, style: "display: block" %>
-    <%= form.text_field :email, required: true %>
+    <%= form.email_field :email %>
   </div>
 
-  <div>
-    <%= form.submit %>
-  </div>
+  <button type="button" class="py-2.5 px-5 ms-0 m-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"> <%= form.submit %> </button>
 <% end %>

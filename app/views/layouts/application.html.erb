@@ -6,6 +6,9 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+     crossorigin=""/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
 
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
@@ -14,10 +17,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="container p-2 bg-white dark:bg-gray-800 h-screen w-screen">
       <%= yield %>
-    </main>
   </body>
 </html>
