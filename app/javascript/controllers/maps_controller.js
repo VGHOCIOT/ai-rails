@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import L from "leaflet"
+import { post } from '@rails/request.js'
 
 // Connects to data-controller="maps"
 export default class extends Controller {
@@ -17,11 +18,25 @@ export default class extends Controller {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map)
 
-    function defineLocation(ev) {
+    async function defineLocation(ev) {
       var lat = ev.latlng.lat
       var lng = ev.latlng.lng
       console.log(lat,lng); 
       L.marker([lat,lng]).addTo(map)
+      const url = '/locations'
+      const data = {
+        latitude: lat,
+        longitude: lng,
+      }
+      const response = await post(url, {responseKind: 'json', body: data})
+      console.log(response)
+      if (response.ok) {
+        console.log('here')
+        // window.notifier.success('Successfully created a new location', {})
+      } else {
+        // const error = await response.json
+        // window.notifier.alert(`Error creating a location: ${JSON.stringify(error)}.`)
+      }
     }
     // inside of here need to create handlers for clicking on the maps, this can be combined with MouseEvents to determine
     // the point at which the user clicked, this should be possible using the stimulus event listeners
@@ -34,10 +49,5 @@ export default class extends Controller {
   // function will have to take in location data that was pressed and decide if the location already exists then call either
   // destroy or create methods in the location endpoint, this will be using Geocoder to take the lat,lng information to allow
   // for the reverse coding into actual address and landmark info
-  defineLocation(ev) {
-    var lat = ev.latlng.lat
-    var lng = ev.latlng.lng
-    console.log(lat,lng); 
-    L.marker([lat,lng]).addTo(map)
-  }
+
 }

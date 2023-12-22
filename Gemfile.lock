@@ -102,6 +102,7 @@ GEM
     drb (2.2.0)
       ruby2_keywords
     erubi (1.12.0)
+    geocoder (1.8.2)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.1)
@@ -195,6 +196,8 @@ GEM
     regexp_parser (2.8.2)
     reline (0.4.0)
       io-console (~> 0.5)
+    requestjs-rails (0.0.11)
+      railties (>= 6.1.0)
     rexml (3.2.6)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
@@ -246,11 +249,13 @@ DEPENDENCIES
   bootsnap
   capybara
   debug
+  geocoder
   importmap-rails
   jbuilder
   pg
   puma (>= 5.0)
   rails (~> 7.1.2)
+  requestjs-rails
   selenium-webdriver
   sprockets-rails
   stimulus-rails
