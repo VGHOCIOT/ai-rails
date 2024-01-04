@@ -3,3 +3,4 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import 'flowbite'
 import "@rails/request.js"
+import "jquery"; // this import first

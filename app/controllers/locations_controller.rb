@@ -4,6 +4,11 @@ class LocationsController < ApplicationController
   # GET /locations or /locations.json
   def index
     @locations = Location.all
+
+    respond_to do |format|
+      format.html
+      format.json # <!-- make sure you have format.json, in addition to html 
+    end
   end
 
   # GET /locations/1 or /locations/1.json

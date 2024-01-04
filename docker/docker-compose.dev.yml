@@ -25,6 +25,7 @@ services:
     depends_on:
       - ai_rails_db
       - ai_rails_vite
+      - redis
     links:
       - ai_rails_db
     ports:
@@ -72,3 +73,9 @@ services:
       - "3036:3036"
     networks:
       - ai-rails-net
+  redis:
+    image: "redis:7-alpine"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./tmp/redis_data:/var/lib/redis/data

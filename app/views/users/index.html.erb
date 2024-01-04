@@ -23,8 +23,9 @@
               <td class="px-6 py-4">
                 <%= user.email %>
               </td>
-              <td class="px-6 py-4">
-                  <div class="font-medium text-blue-600 dark:text-blue-500 hover:underline"> <%= link_to "Edit", edit_user_path(user) %></a>
+              <td class="flex px-6 py-4">
+                <div class="font-medium text-blue-600 dark:text-blue-500 hover:underline"> <%= link_to "Edi", edit_user_path(user) %></div>
+                <div class="ps-2 font-medium text-blue-600 dark:text-blue-500 hover:underline"> <%= link_to "Delete", user_path(user), data: { turbo_method: :delete, turbo_confirm: "Are you sure?"} %></div>
               </td>
             </tr>
           <% end %>
