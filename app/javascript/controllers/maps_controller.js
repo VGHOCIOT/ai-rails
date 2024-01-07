@@ -4,6 +4,7 @@ import { get, post, destroy } from '@rails/request.js'
 // Connects to data-controller="maps"
 export default class extends Controller {
   static targets = ["container"]
+  markers = new Array()
 
   connect() {
     // creation of the first section of the map could first ask the user where they are taking their trip from, then the first
@@ -17,17 +18,46 @@ export default class extends Controller {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map)
 
-    var markers = new Array()
-
-    this.addMarkers(map)
+    this.addMarkers(map, true)
+    console.log(this.markers)
     // inside of here need to create handlers for clicking on the maps, this can be combined with MouseEvents to determine
     // the point at which the user clicked, this should be possible using the stimulus event listeners
-    async function defineLocation(ev) {
-      // if the marker doesn't already exist, create it 
-      var lat = ev.latlng.lat
-      var lng = ev.latlng.lng
-      console.log(lat,lng); 
-      L.marker([lat,lng]).addTo(map)
+
+    map.on('click', (ev) => {
+      this.addMarkers(map, false),
+      this.defineLocation(ev, map)
+    })
+  }
+
+  disconnect() {
+    this.map.remove()
+  }
+
+  async defineLocation(ev, map) {
+    // this.addMarkers(map)
+    // if the marker doesn't already exist, create it 
+    var lat = ev.latlng.lat
+    var lng = ev.latlng.lng
+    console.log(lat,lng) 
+    var existing = false
+    // if the marker already exists at that location, within an abs differnce of .0002 lat or long, then remove the marker and hit a delete
+    this.markers.forEach(async (field) => {
+      if ((Math.abs(lat - field.latitude) <= 0.0003) && (Math.abs(lng - field.longitude) < 0.0003)) {
+        existing = true
+        const responseDestroy = await destroy(`/locations/${field.id}`, { responseKind: 'json'})
+        if (responseDestroy.ok) {
+          map.removeLayer(L.marker[field.latitude,field.longitude])
+          // window.notifier.success('Successfully created a new location', {})
+        } else {
+          // const error = await response.json
+          // window.notifier.alert(`Error creating a location: ${JSON.stringify(error)}.`)
+        }
+      }
+    // })
+    })
+    console.log(existing)
+    if (existing === false) {
+      map.addLayer(L.marker([lat,lng]))
       const url = '/locations'
       const data = {
         latitude: lat,
@@ -36,25 +66,15 @@ export default class extends Controller {
       const response = await post(url, {responseKind: 'json', body: data})
       console.log(response)
       if (response.ok) {
-        console.log('here')
         // window.notifier.success('Successfully created a new location', {})
       } else {
         // const error = await response.json
         // window.notifier.alert(`Error creating a location: ${JSON.stringify(error)}.`)
       }
-
-      // if the marker already exists at that location, within an abs differnce of .0002 lat or long, then remove the marker and hit a delete
-      // const destroyResponse = await destroy(`/locations/${id}`, { responseKind: 'turbo-stream'})
     }
-
-    map.on('click', defineLocation)
   }
 
-  disconnect() {
-    this.map.remove()
-  }
-
-  async addMarkers(map) {
+  async addMarkers(map, addMarkers) {
     // $.getJSON("/locations", function(result){
       // console.log(result)
       // result.forEach((field) => {
@@ -69,8 +89,11 @@ export default class extends Controller {
       if (response.ok){
         const data = await response.json
         data.forEach((field) => {
-          console.log(field)
-          L.marker([field.latitude,field.longitude]).addTo(map)
+          // console.log(field)
+          if (addMarkers) {
+            map.addLayer(L.marker([field.latitude,field.longitude]))
+          }
+          this.markers.push(field)
         })
       }
   }
