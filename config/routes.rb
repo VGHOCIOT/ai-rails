@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :path_markers
   root 'public#index'
   resources :locations
   resources :users

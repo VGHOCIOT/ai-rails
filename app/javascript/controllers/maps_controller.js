@@ -3,37 +3,50 @@ import L from "leaflet"
 import { get, post, destroy } from '@rails/request.js'
 // Connects to data-controller="maps"
 export default class extends Controller {
-  static targets = ["container"]
+  static targets = ["container", "clear"]
   markers = new Array()
 
-  connect() {
+  initialize() {
     // creation of the first section of the map could first ask the user where they are taking their trip from, then the first
     // few locations could be created based on the view (this could involve smarter start-up, i.e give an option for abandoning
     // the previous trip and starting new with removal of previous locations and etc, this will also need a model rep for the
     // current map center)
     var map = L.map(this.containerTarget).setView([43.65, -79.38], 13.5)
+    var layer = L.layerGroup().addTo(map)
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map)
 
-    this.addMarkers(map, true)
+    // this marker adding seciton should not be hit on first load of the map
+    // this.addMarkers(map, true)
     console.log(this.markers)
     // inside of here need to create handlers for clicking on the maps, this can be combined with MouseEvents to determine
     // the point at which the user clicked, this should be possible using the stimulus event listeners
 
     map.on('click', (ev) => {
       this.addMarkers(map, false),
-      this.defineLocation(ev, map)
+      this.defineLocation(ev, map, layer)
     })
+
+    this.clearTarget.addEventListener('click', () => { this.ClearAllLocations(map, layer) })
+  }
+
+  connect() {
   }
 
   disconnect() {
     this.map.remove()
   }
 
-  async defineLocation(ev, map) {
+  // Function will have to take in location data that was pressed and decide if the location already exists then call either
+  // destroy or create methods in the location endpoint, this will be using Geocoder to take the lat,lng information to allow
+  // for the reverse coding into actual address and landmark info
+
+  // instead of using boolean check if point is already defined by searching for as close of a point as possible, change this 
+  // method name to be marker movement related, remove calls to addition to location endpoint from here as well as removal, just adding to list
+  async defineLocation(ev, map, layer) {
     // this.addMarkers(map)
     // if the marker doesn't already exist, create it 
     var lat = ev.latlng.lat
@@ -57,7 +70,7 @@ export default class extends Controller {
     })
     console.log(existing)
     if (existing === false) {
-      map.addLayer(L.marker([lat,lng]))
+      L.marker([lat,lng]).addTo(layer)
       const url = '/locations'
       const data = {
         latitude: lat,
@@ -74,6 +87,8 @@ export default class extends Controller {
     }
   }
 
+  // change this function to refresh the map to show the selected locations (potentially optimized path and markers?) in the grouping the 
+  // user selects, make the 
   async addMarkers(map, addMarkers) {
     // $.getJSON("/locations", function(result){
       // console.log(result)
@@ -97,8 +112,19 @@ export default class extends Controller {
         })
       }
   }
-  // function will have to take in location data that was pressed and decide if the location already exists then call either
-  // destroy or create methods in the location endpoint, this will be using Geocoder to take the lat,lng information to allow
-  // for the reverse coding into actual address and landmark info
 
+  // Function will take in all selected markers and populate them as locations in the database only then will the new 
+  // endpoint will be hit that will automatically create the new optimized path (need to decide what this needs to be 
+  // at first, will process need a data structure for the path points to be passed in)
+  async SetPathLocations() {
+
+  }
+
+  // Cancel function that will enable at any moment to remove all markers and all listed makers in array 
+  ClearAllLocations(map, layer) {
+    layer.eachLayer(field => {
+      layer.removeLayer(field)
+    })
+  }
+  // Edit the current option? How would that work
 }

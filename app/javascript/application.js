@@ -4,3 +4,5 @@ import "controllers"
 import 'flowbite'
 import "@rails/request.js"
 import "jquery"; // this import first
+
+FontAwesome.config.mutateApproach = 'sync'

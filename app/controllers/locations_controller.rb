@@ -27,7 +27,8 @@ class LocationsController < ApplicationController
   # POST /locations or /locations.json
   def create
     @location = Location.new(location_params)
-
+    
+    # as part of creation need to call method inside of model that is going to populate the rest of the information needed for a location
     respond_to do |format|
       if @location.save
         format.html { redirect_to location_url(@location), notice: "Location was successfully created." }

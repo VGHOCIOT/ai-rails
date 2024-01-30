@@ -9,5 +9,8 @@
     @apply py-2 px-4 bg-blue-200;
   }
 }
-
 */
+
+.leaflet-pane { z-index: 0 !important; }
+.leaflet-bottom { z-index: 0 !important; }
+.leaflet-zoom-box { z-index: 0 !important; }

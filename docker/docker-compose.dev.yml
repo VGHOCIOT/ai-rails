@@ -7,6 +7,7 @@ volumes:
   node_modules:
   rails_cache:
   public:
+  redis_data:
 
 networks:
   ai-rails-net:
@@ -74,8 +75,6 @@ services:
     networks:
       - ai-rails-net
   redis:
-    image: "redis:7-alpine"
-    ports:
-      - "6379:6379"
+    image: 'redis:7-alpine'
     volumes:
-      - ./tmp/redis_data:/var/lib/redis/data
+      - redis_data:/data

@@ -1,5 +1,5 @@
 # https://medium.com/firehydrant-io/developing-a-ruby-on-rails-app-with-docker-compose-d75b20334634
-FROM ruby:latest
+FROM ruby:3.2.2
 
 # Additional packages needed for compiling gems
 RUN apt-get update -q && \
