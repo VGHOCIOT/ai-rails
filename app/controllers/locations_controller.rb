@@ -3,6 +3,7 @@ class LocationsController < ApplicationController
 
   # GET /locations or /locations.json
   def index
+    @path_markers = PathMarker.all
     @locations = Location.all
 
     respond_to do |format|
@@ -71,6 +72,6 @@ class LocationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def location_params
-      params.require(:location).permit(:latitude, :longitude, :address, :designation, :name)
+      params.require(:location).permit(:path_marker_id, :latitude, :longitude, :address, :designation, :name)
     end
 end

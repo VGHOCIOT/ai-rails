@@ -22,14 +22,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_25_190520) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "path_marker_id"
+    t.index ["path_marker_id"], name: "index_locations_on_path_marker_id"
   end
 
   create_table "path_markers", force: :cascade do |t|
     t.string "name"
-    t.bigint "location_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["location_id"], name: "index_path_markers_on_location_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -40,5 +40,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_25_190520) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "path_markers", "locations"
+  add_foreign_key "locations", "path_markers"
 end

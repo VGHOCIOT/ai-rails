@@ -1,5 +1,28 @@
-<turbo-stream action="append" target="path_markers">
-  <template>
-    <%= path_marker.name %>
-  </template>
-</turbo-stream>
+<div id="<%= dom_id(path_marker) %>">
+ <%# need to include selection and deletion buttons that will remove the path_marker with a delete 
+ event and a select action taht will hit the maps controller to select the new grouping %>
+ <div class="container mt-2">
+  <div class="flex flex-row text-center justify-between">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white"><%= path_marker.name %></h3>
+    <div>
+      <button type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"> Select </button> 
+      <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"> Delete </button>
+    </div>
+  </div>
+    <% path_marker.locations.each do |location| %>
+      <div class="p-8 bg-white border-b border-gray-200 rounded-t-lg md:rounded-t-none md:rounded-ss-lg md:border-e dark:bg-gray-800 dark:border-gray-700">
+          <blockquote class="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white"> <%= location.address %> </h3>
+              <p class="my-4"> <%= location.latitude %> </p>
+              <p class="my-4"> <%= location.longitude %> </p>
+          </blockquote>
+          <%# <figcaption class="flex items-center justify-center ">
+              <div class="space-y-0.5 font-medium dark:text-white text-left rtl:text-right ms-3">
+                  <div>Bonnie Green</div>
+                  <div class="text-sm text-gray-500 dark:text-gray-400 ">Developer at Open AI</div>
+              </div>
+          </figcaption>     %>
+      </div>
+    <% end %>
+  </div>
+</div>

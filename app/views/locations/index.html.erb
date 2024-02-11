@@ -1,34 +1,27 @@
-<h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Locations</h1>
-<div class="relative overflow-x-auto">
-  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        <tr>
-          <th scope="col" class="px-6 py-3">
-            Id
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Address
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Actions
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @locations.each do |location| %>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              <%= location.id %>
-            </th>
-            <td class="px-6 py-4">
-              <%= location.address %>
-            </td>
-            <td class="flex px-6 py-4">
-              <div class="font-medium text-blue-600 dark:text-blue-500 hover:underline"> <%= link_to "Edit", edit_location_path(location) %></div>
-              <div class="ps-2 font-medium text-blue-600 dark:text-blue-500 hover:underline"> <%= link_to "Delete", location_path(location), data: { turbo_method: :delete, turbo_confirm: "Are you sure?"} %></div>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-  </table>
-  <button type="button" class="py-2.5 px-5 m-2 ms-0 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"> <%= link_to "Go to map", root_path %> </button>
+<div data-controller="maps">
+  <div class="-z-30">
+    <div data-maps-target="container" class="h-96 w-screen"></div>
+  </div>
+  <%# Need to include clear and submission buttons on the side of the map, submission means creation of grouping of points and a runthrough of the path algorithm %>
+  <div class="mt-1 flex-row">
+    <%= label(:title, "Trip name:", class:"text-gray-900 dark:text-white") %>
+    <%= text_field_tag(:title, nil, data: {"maps-target": "text"}) %>
+    <button data-maps-target="submit" type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"> Submit </button>
+    <button data-maps-target="clear" type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"> Cancel </button>
+  </div>
+
+</div>
+
+<%# This dropdown section needs to include multiple sections for  %>
+<div id="drawer-swipe" class="fixed z-40 w-full overflow-y-auto bg-white border-t border-gray-200 rounded-t-lg dark:border-gray-700 dark:bg-gray-800 transition-transform bottom-0 left-0 right-0 translate-y-full bottom-[60px]" tabindex="-1" aria-labelledby="drawer-swipe-label">
+  <div class="p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700" data-drawer-toggle="drawer-swipe">
+      <span class="absolute w-8 h-1 -translate-y-1/2 bg-gray-300 rounded-lg top-3 left-1/2 dark:bg-gray-600" data-drawer-target="drawer-swipe" data-drawer-show="drawer-swipe" data-drawer-placement="bottom" data-drawer-edge="true" data-drawer-edge-offset="bottom-[60px]" aria-controls="drawer-swipe"></span>
+  </div>
+  <div class="h-80 gap-4 p-4">
+    <div id="path_markers_list">
+      <%= render partial: 'path_markers/path_marker', collection: @path_markers %>
+    </div>
+    <%= turbo_stream_from "path_markers_list" %>
+  </div>
+</div>
+

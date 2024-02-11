@@ -25,7 +25,7 @@ class PathMarkersController < ApplicationController
 
     respond_to do |format|
       if @path_marker.save
-        format.html { redirect_to path_marker_url(@path_marker), notice: "Path marker was successfully created." }
+        format.turbo_stream { render turbo_stream: turbo_stream.append('path_markers_list', partial: 'path_markers/path_marker', locals: { path_marker: @new_path_marker }) }
         format.json { render :show, status: :created, location: @path_marker }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -65,6 +65,6 @@ class PathMarkersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def path_marker_params
-      params.fetch(:path_marker, {})
+      params.require(:path_marker).permit(:name)
     end
 end

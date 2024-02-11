@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   resources :path_markers
-  root 'public#index'
   resources :locations
   resources :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

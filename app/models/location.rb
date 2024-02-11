@@ -2,7 +2,7 @@ class Location < ApplicationRecord
   reverse_geocoded_by :latitude, :longitude
   after_validation :reverse_geocode
 
-  belongs_to :path_markers
+  belongs_to :path_marker
   # add a before? after? creation function that will list the correct venue of the location; cannot do this based off of
   # https://stackoverflow.com/questions/55010460/find-near-banks-schools-from-latitude-and-longitude-using-geocoder-gem
 
