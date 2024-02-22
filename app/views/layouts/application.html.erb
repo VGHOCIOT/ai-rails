@@ -17,6 +17,10 @@
     <%= javascript_importmap_tags %>
     <%= action_cable_meta_tag %>
     <%= hotwire_livereload_tags if Rails.env.development? %>
+    <script>
+      const RAPID_API_KEY = '<%= ENV['RAPID_API_KEY'] %>';
+      const RAPID_API_URL = '<%= ENV['RAPID_API_URL'] %>';
+    </script>
   </head>
 
   <body class="container p-2 bg-white dark:bg-gray-800 h-screen w-screen">
